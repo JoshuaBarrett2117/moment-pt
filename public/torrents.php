@@ -1019,14 +1019,105 @@ if ($count)
     unset($res);
 }
 
-// 直接显示种子列表
-if (isset($rows) && $sectiontype == $browsecatmode)
-	torrenttable($rows, "torrents", $sectiontype);
-elseif ($sectiontype == $specialcatmode)
-	torrenttable($rows, "music", $sectiontype);
-else torrenttable($rows, "bookmarks", $sectiontype);
+if (isset($searchstr))
+	stdhead($lang_torrents['head_search_results_for'].$searchstr_ori);
+elseif ($sectiontype == $browsecatmode)
+	stdhead($lang_torrents['head_torrents']);
+else stdhead($lang_torrents['head_special']);
+print("<table width=\"97%\" class=\"main\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\"><tr><td class=\"embedded\">");
 
-print($pagerbottom);
+// 引入轮播图显示组件
+require_once("carousel_display.php");
+// 显示轮播图
+echo display_carousel();
+
+displayHotAndClassic();
+
+// 轮播图组件已移除，现在使用carousel_display.php中的动态轮播图
+{
+//	if ($where != "")
+//		$where = "WHERE $where AND categories.mode = '$sectiontype'";
+//	else $where = "WHERE categories.mode = '$sectiontype'";
+
+//	$sql = "SELECT COUNT(*), categories.mode FROM torrents LEFT JOIN categories ON category = categories.id " . ($search_area == 3 || $column == "owner" ? "LEFT JOIN users ON torrents.owner = users.id " : "") . $tagFilter . $where . " GROUP BY categories.mode";
+	$sql = "SELECT COUNT(*) FROM torrents " . ($search_area == 3 || $column == "owner" ? "LEFT JOIN users ON torrents.owner = users.id " : "") . $tagFilter . $torrentExtraFilter . $where;
+}
+
+if ($shouldUseMeili) {
+    $searchRep = new \App\Repositories\MeiliSearchRepository();
+    $resultFromSearchRep = $searchRep->search($searchParams, $CURUSER['id']);
+    $count = $resultFromSearchRep['total'];
+} else {
+    do_log("[BEFORE_TORRENT_COUNT_SQL]", 'debug');
+    $res = sql_query($sql);
+    do_log("[AFTER_TORRENT_COUNT_SQL] $sql", 'debug');
+    $count = 0;
+    while($row = mysql_fetch_array($res)) {
+        $count += $row[0];
+    }
+}
+$maxPageSize = 100;
+if (!empty($_GET['pageSize'])) {
+    $torrentsperpage = $_GET['pageSize'];
+} elseif ($CURUSER["torrentsperpage"]) {
+    $torrentsperpage = (int)$CURUSER["torrentsperpage"];
+} elseif ($torrentsperpage_main) {
+    $torrentsperpage = $torrentsperpage_main;
+} else {
+    $torrentsperpage = $maxPageSize;
+}
+$torrentsperpage = min($maxPageSize, $torrentsperpage);
+
+if ($count)
+{
+    if (isset($searchstr) && (!isset($_GET['notnewword']) || !$_GET['notnewword'])){
+        insert_suggest($searchstr, $CURUSER['id']);
+    }
+	if ($addparam != "")
+	{
+		if ($pagerlink != "")
+		{
+			if ($addparam[strlen($addparam)-1] != ";")
+			{ // & = &amp;
+				$addparam = $addparam . "&" . $pagerlink;
+			}
+			else
+			{
+				$addparam = $addparam . $pagerlink;
+			}
+		}
+	}
+	else
+	{
+		//stderr("in else","");
+		$addparam = $pagerlink;
+	}
+	//stderr("addparam",$addparam);
+	//echo $addparam;
+
+	list($pagertop, $pagerbottom, $limit, $offset, $size, $page) = pager($torrentsperpage, $count, "?" . $addparam);
+	$fieldsStr = implode(', ', \App\Models\Torrent::getFieldsForList(true));
+//    if ($allsec == 1 || $enablespecial != 'yes') {
+//        $query = "SELECT $fieldsStr FROM torrents ".($search_area == 3 || $column == "owner" ? "LEFT JOIN users ON torrents.owner = users.id " : "")." $tagFilter $where $orderby $limit";
+//    } else {
+//        $query = "SELECT $fieldsStr, categories.mode as search_box_id FROM torrents ".($search_area == 3 || $column == "owner" ? "LEFT JOIN users ON torrents.owner = users.id " : "")." LEFT JOIN categories ON torrents.category=categories.id $tagFilter $where $orderby $limit";
+        $query = "SELECT $fieldsStr, $sectiontype as search_box_id FROM torrents ".($search_area == 3 || $column == "owner" ? "LEFT JOIN users ON torrents.owner = users.id " : "")."$tagFilter $torrentExtraFilter $where $orderby $limit";
+//    }
+
+    if (!$shouldUseMeili) {
+        do_log("[BEFORE_TORRENT_LIST_SQL]", 'debug');
+        $res = sql_query($query);
+        do_log("[AFTER_TORRENT_LIST_SQL] $query", 'debug');
+    }
+} else {
+    unset($res);
+}
+
+if (isset($searchstr))
+	stdhead($lang_torrents['head_search_results_for'].$searchstr_ori);
+elseif ($sectiontype == $browsecatmode)
+	stdhead($lang_torrents['head_torrents']);
+else stdhead($lang_torrents['head_special']);
 
 // 直接显示种子列表
 if (isset($rows) && $sectiontype == $browsecatmode)
