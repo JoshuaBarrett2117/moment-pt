@@ -2735,17 +2735,17 @@ print '<br/>';
 	</span></td>
 	</tr></table></td>
 </tr></table>
+            <table id="banner" cellpadding="4" cellspacing="0" border="0" width="100%"><tr>
+                <tr><td>
+                    <?php
+                    // 引入轮播图显示组件
+                    require_once("carousel_display.php");
+                    // 显示轮播图
+                    echo display_carousel();
+                    ?>
+                    </td></tr>
+            </table>
 
-<table id="banner" cellpadding="4" cellspacing="0" border="0" width="100%"><tr>
-    <tr>
-        <?php
-            // 引入轮播图显示组件
-            require_once("carousel_display.php");
-            // 显示轮播图
-            echo display_carousel();
-        ?>
-    </tr>
-</table>
 </td></tr>
 
 <tr><td id="outer" align="center" class="outer" style="padding-top: 20px; padding-bottom: 20px">
