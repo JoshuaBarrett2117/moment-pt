@@ -10,12 +10,9 @@ function display_carousel() {
     $result = sql_query($query);
     $carousels = [];
     
-    // 只添加有图片的轮播项
+    // 添加所有启用的轮播项（不再强制要求image字段）
     while ($row = mysql_fetch_assoc($result)) {
-        // 过滤掉image字段为空的轮播项
-        if (!empty($row['image'])) {
-            $carousels[] = $row;
-        }
+        $carousels[] = $row;
     }
     
     // 如果没有有效的轮播图，则不显示
@@ -44,10 +41,22 @@ function display_carousel() {
 ";
         }
         
-        // 显示图片 - 直接使用数据库image字段的完整URL
-        $img_url = htmlspecialchars($carousel['image']);
-        $carousel_html .= "        <img src=\"$img_url\" alt=\"" . htmlspecialchars($carousel['title']) . "\" style=\"width: 100%; height: 100%; object-fit: cover;\" />
+        // 显示图片或背景 - 如果有image字段则显示图片，否则显示背景颜色/渐变
+        if (!empty($carousel['image'])) {
+            $img_url = htmlspecialchars($carousel['image']);
+            $carousel_html .= "        <img src=\"$img_url\" alt=\"" . htmlspecialchars($carousel['title']) . "\" style=\"width: 100%; height: 100%; object-fit: cover;\" />
 ";
+        } else {
+            // 没有图片时，显示标题和描述的居中内容
+            $carousel_html .= "        <div style=\"display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; text-align: center; padding: 20px;\">\n";
+            if (!empty($carousel['title'])) {
+                $carousel_html .= "          <h2 style=\"margin: 0 0 15px 0; font-size: 24px; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);\">" . htmlspecialchars($carousel['title']) . "</h2>\n";
+            }
+            if (!empty($carousel['description'])) {
+                $carousel_html .= "          <p style=\"margin: 0; font-size: 16px; color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);\">" . htmlspecialchars($carousel['description']) . "</p>\n";
+            }
+            $carousel_html .= "        </div>\n";
+        }
 
         
         // 如果有链接，关闭a标签
@@ -56,20 +65,16 @@ function display_carousel() {
 ";
         }
         
-        // 如果有标题和描述，显示在图片下方
-        if (!empty($carousel['title']) || !empty($carousel['description'])) {
-            $carousel_html .= "      <div class=\"carousel-caption\" style=\"position: absolute; bottom: 0; left: 0; right: 0; background-color: rgba(0,0,0,0.7); color: white; padding: 15px; text-align: center;\">
-";
+        // 如果有标题和描述，并且没有图片时显示在图片下方（有图片时在图片上显示）
+        if ((!empty($carousel['title']) || !empty($carousel['description'])) && !empty($carousel['image'])) {
+            $carousel_html .= "      <div class=\"carousel-caption\" style=\"position: absolute; bottom: 0; left: 0; right: 0; background-color: rgba(0,0,0,0.7); color: white; padding: 15px; text-align: center;\">\n";
             if (!empty($carousel['title'])) {
-                $carousel_html .= "        <h3 style=\"margin: 0 0 10px 0; font-size: 18px;\">" . htmlspecialchars($carousel['title']) . "</h3>
-";
+                $carousel_html .= "        <h3 style=\"margin: 0 0 10px 0; font-size: 18px;\">" . htmlspecialchars($carousel['title']) . "</h3>\n";
             }
             if (!empty($carousel['description'])) {
-                $carousel_html .= "        <p style=\"margin: 0; font-size: 14px;\">" . htmlspecialchars($carousel['description']) . "</p>
-";
+                $carousel_html .= "        <p style=\"margin: 0; font-size: 14px;\">" . htmlspecialchars($carousel['description']) . "</p>\n";
             }
-            $carousel_html .= "      </div>
-";
+            $carousel_html .= "      </div>\n";
         }
         
         $carousel_html .= "    </div>
