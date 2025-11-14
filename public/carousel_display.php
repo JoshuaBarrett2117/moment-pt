@@ -10,11 +10,15 @@ function display_carousel() {
     $result = sql_query($query);
     $carousels = [];
     
+    // 只添加有图片的轮播项
     while ($row = mysql_fetch_assoc($result)) {
-        $carousels[] = $row;
+        // 过滤掉image字段为空的轮播项
+        if (!empty($row['image'])) {
+            $carousels[] = $row;
+        }
     }
     
-    // 如果没有轮播图，则不显示
+    // 如果没有有效的轮播图，则不显示
     if (empty($carousels)) {
         return '';
     }
@@ -40,12 +44,11 @@ function display_carousel() {
 ";
         }
         
-        // 显示图片
-        if (!empty($carousel['image'])) {
-            $img_url = $BASEURL . '/public/carousel/' . htmlspecialchars($carousel['image']);
-            $carousel_html .= "        <img src=\"$img_url\" alt=\"" . htmlspecialchars($carousel['title']) . "\" style=\"width: 100%; height: 100%; object-fit: cover;\" />
+        // 显示图片 - 直接使用数据库image字段的完整URL
+        $img_url = htmlspecialchars($carousel['image']);
+        $carousel_html .= "        <img src=\"$img_url\" alt=\"" . htmlspecialchars($carousel['title']) . "\" style=\"width: 100%; height: 100%; object-fit: cover;\" />
 ";
-        }
+
         
         // 如果有链接，关闭a标签
         if (!empty($carousel['link'])) {
