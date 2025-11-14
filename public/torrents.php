@@ -1026,6 +1026,11 @@ elseif ($sectiontype == $browsecatmode)
 else stdhead($lang_torrents['head_special']);
 print("<table width=\"97%\" class=\"main\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\"><tr><td class=\"embedded\">");
 
+// 引入轮播图显示组件
+require_once("carousel_display.php");
+// 显示轮播图
+echo display_carousel();
+
 displayHotAndClassic();
 
 // 轮播图组件已移除，现在使用carousel_display.php中的动态轮播图
@@ -1123,22 +1128,13 @@ else torrenttable($rows, "bookmarks", $sectiontype);
 
 print($pagerbottom);
 
-if (isset($count) && $count > 0) {
-	if (isset($searchstr)) {
-		print("<br />");
-		stdmsg($lang_torrents['std_search_results_for'] . $searchstr_ori . "\"",$lang_torrents['std_try_again']);
-	}
-	else {
-		stdmsg($lang_torrents['std_nothing_found'],$lang_torrents['std_no_active_torrents']);
-	}
-}
-
 if ($CURUSER){
 	if ($sectiontype == $browsecatmode)
 		$USERUPDATESET[] = "last_browse = ".TIMENOW;
 	else	$USERUPDATESET[] = "last_music = ".TIMENOW;
 }
 
+print("</td></tr></table>");
 stdfoot();
 
 
