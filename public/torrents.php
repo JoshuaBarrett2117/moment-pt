@@ -1496,6 +1496,10 @@ if ($allsec != 1 || $enablespecial != 'yes'){ //do not print searchbox if showin
 						</td>
 					</tr>
 <?php
+// 引入轮播图显示组件
+require_once('carousel_display.php');
+echo display_carousel();
+
 $Cache->new_page('hot_search', 3670, true);
 if (!$Cache->get_page()){
 	$secs = 3*24*60*60;
