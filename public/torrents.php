@@ -1024,12 +1024,14 @@ if (isset($searchstr))
 elseif ($sectiontype == $browsecatmode)
 	stdhead($lang_torrents['head_torrents']);
 else stdhead($lang_torrents['head_special']);
+// 引入轮播图显示组件
+require_once("carousel_display.php");
+// 显示轮播图
+echo display_carousel();
+
 print("<table width=\"97%\" class=\"main\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\"><tr><td class=\"embedded\">");
 
-// 引入轮播图显示组件
-//require_once("carousel_display.php");
-// 显示轮播图
-//echo display_carousel();
+
 
 displayHotAndClassic();
 
