@@ -1003,10 +1003,17 @@ if ($count)
         $query = "SELECT $fieldsStr, $sectiontype as search_box_id FROM torrents ".($search_area == 3 || $column == "owner" ? "LEFT JOIN users ON torrents.owner = users.id " : "")."$tagFilter $torrentExtraFilter $where $orderby $limit";
 //    }
 
-    if (!$shouldUseMeili) {
+    if ($shouldUseMeili) {
+        $resultFromSearchRep = $searchRep->search($searchParams, $CURUSER['id'], $limit, $offset, $orderby);
+        $rows = $resultFromSearchRep['list'];
+    } else {
         do_log("[BEFORE_TORRENT_LIST_SQL]", 'debug');
         $res = sql_query($query);
         do_log("[AFTER_TORRENT_LIST_SQL] $query", 'debug');
+        $rows = array();
+        while ($row = mysql_fetch_array($res)) {
+            $rows[] = $row;
+        }
     }
 } else {
     unset($res);
