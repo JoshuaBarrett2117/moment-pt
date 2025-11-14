@@ -36,12 +36,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 
 stdhead($lang_index['head_home']);
 begin_main_frame();
-
-// 引入轮播图显示组件
-require_once("carousel_display.php");
-// 显示轮播图
-echo display_carousel();
-
 // ------------- start: recent news ------------------//
 print("<h2>".$lang_index['text_recent_news'].(user_can('newsmanage') ? " - <font class=\"small\">[<a class=\"altlink\" href=\"news.php\"><b>".$lang_index['text_news_page']."</b></a>]</font>" : "")."</h2>");
 
