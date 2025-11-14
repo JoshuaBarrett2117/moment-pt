@@ -1027,9 +1027,6 @@ displayHotAndClassic();
 //		$where = "WHERE $where AND categories.mode = '$sectiontype'";
 //	else $where = "WHERE categories.mode = '$sectiontype'";
 
-    if ($where != "")
-        $where = "WHERE $where";
-    else $where = "";
 //	$sql = "SELECT COUNT(*), categories.mode FROM torrents LEFT JOIN categories ON category = categories.id " . ($search_area == 3 || $column == "owner" ? "LEFT JOIN users ON torrents.owner = users.id " : "") . $tagFilter . $where . " GROUP BY categories.mode";
 	$sql = "SELECT COUNT(*) FROM torrents " . ($search_area == 3 || $column == "owner" ? "LEFT JOIN users ON torrents.owner = users.id " : "") . $tagFilter . $torrentExtraFilter . $where;
 }
