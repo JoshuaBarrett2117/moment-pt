@@ -33,16 +33,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 		stderr($lang_index['std_error'], $lang_index['std_option_unselected']);
 	}
 }
-// 引入轮播图显示组件
-require_once("carousel_display.php");
-
-// 显示轮播图
-echo display_carousel();
 
 stdhead($lang_index['head_home']);
 begin_main_frame();
 
-
+// 引入轮播图显示组件
+require_once("carousel_display.php");
 // 显示轮播图
 echo display_carousel();
 
