@@ -6,7 +6,7 @@ function display_carousel() {
     global $BASEURL, $CURUSER;
     
     // 从数据库获取启用的轮播图
-    $query = "SELECT * FROM carousel WHERE enabled = 'yes' ORDER BY order_num ASC";
+    $query = "SELECT * FROM carousels WHERE active = '1' ORDER BY sort_order ASC";
     $result = sql_query($query);
     $carousels = [];
     
@@ -24,8 +24,12 @@ function display_carousel() {
     $carousel_html .= '  <div id="carousel" style="position: relative; height: 300px; background-color: #f5f5f5;">\n';
     
     foreach ($carousels as $index => $carousel) {
-        $active = $index == 0 ? ' style="display: block;"' : ' style="display: none;"';
-        $carousel_html .= '    <div class="carousel-item"' . $active . '>\n';
+        $active = $index == 0 ? 'style="display: block;' : 'style="display: none;';
+        if (!empty($carousel['background'])) {
+            $active .= ' background: ' . htmlspecialchars($carousel['background']) . ';';
+        }
+        $active .= '"';
+        $carousel_html .= '    <div class="carousel-item" ' . $active . '>\n';
         
         // 如果有链接，用a标签包裹
         if (!empty($carousel['link'])) {
@@ -33,8 +37,10 @@ function display_carousel() {
         }
         
         // 显示图片
-        $img_url = !empty($carousel['image']) ? $BASEURL . '/carousel/' . htmlspecialchars($carousel['image']) : $BASEURL . '/pic/nopic.gif';
-        $carousel_html .= '        <img src="' . $img_url . '" alt="' . htmlspecialchars($carousel['title']) . '" style="width: 100%; height: 100%; object-fit: cover;" />\n';
+        if (!empty($carousel['image'])) {
+            $img_url = $BASEURL . '/public/carousel/' . htmlspecialchars($carousel['image']);
+            $carousel_html .= '        <img src="' . $img_url . '" alt="' . htmlspecialchars($carousel['title']) . '" style="width: 100%; height: 100%; object-fit: cover;" />\n';
+        }
         
         // 如果有链接，关闭a标签
         if (!empty($carousel['link'])) {

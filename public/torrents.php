@@ -1124,8 +1124,9 @@ print("<table width=\"97%\" class=\"main\" border=\"0\" cellspacing=\"0\" cellpa
 
 displayHotAndClassic();
 
-// 杞挱鍥剧粍浠?
-// 轮播图组件已移除，现在使用carousel_display.php中的动态轮播图
+// 引入并显示轮播图组件
+require_once('carousel_display.php');
+echo display_carousel();
 	if (isset($rows) && $sectiontype == $browsecatmode)
 		torrenttable($rows, "torrents", $sectiontype);
 	elseif ($sectiontype == $specialcatmode)
