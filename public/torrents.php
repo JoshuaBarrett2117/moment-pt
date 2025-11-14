@@ -1027,12 +1027,6 @@ print("<table width=\"97%\" class=\"main\" border=\"0\" cellspacing=\"0\" cellpa
 displayHotAndClassic();
 
 // 轮播图组件已移除，现在使用carousel_display.php中的动态轮播图
-if ($where != "") {
-			$where = "WHERE $where ";
-		} else {
-			$where = "";
-		}
-		$sql = "SELECT COUNT(*) FROM torrents " . ($search_area == 3 || $column == "owner" ? "LEFT JOIN users ON torrents.owner = users.id " : "") . $tagFilter . $torrentExtraFilter . $where;
 {
 //	if ($where != "")
 //		$where = "WHERE $where AND categories.mode = '$sectiontype'";
