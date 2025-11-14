@@ -935,7 +935,12 @@ if ($allsec == 1 || $enablespecial != 'yes')
 		$sql = "SELECT COUNT(*) FROM torrents " . ($search_area == 3 || $column == "owner" ? "LEFT JOIN users ON torrents.owner = users.id " : "") . $tagFilter . $torrentExtraFilter . $where;
 	}
 	else
-{}
+	{
+		if ($where != "")
+			$where = "WHERE $where";
+		else $where = "";
+		$sql = "SELECT COUNT(*) FROM torrents " . ($search_area == 3 || $column == "owner" ? "LEFT JOIN users ON torrents.owner = users.id " : "") . $tagFilter . $torrentExtraFilter . $where;
+	}
 
 if ($shouldUseMeili) {
     $searchRep = new \App\Repositories\MeiliSearchRepository();
