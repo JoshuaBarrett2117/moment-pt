@@ -35,9 +35,6 @@ if (get_user_class() >= UC_SYSOP) {
 
 		echo("<tr><td class=rowfollow align=left><strong><a href=$url>$name</a></strong></td> <td class=rowfollow align=left>$info</td></tr>");
 	}
-	
-	// 硬编码添加轮播图配置菜单项
-	echo("<tr><td class=rowfollow align=left><strong><a href=carousel_config.php>轮播图配置</a></strong></td> <td class=rowfollow align=left>管理网站首页轮播图内容</td></tr>");
 	print("</table>");
 	print("<br />");
 	print("<br />");
