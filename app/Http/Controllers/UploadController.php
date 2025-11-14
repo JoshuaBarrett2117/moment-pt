@@ -6,6 +6,7 @@ use App\Auth\Permission;
 use App\Http\Resources\SearchBoxResource;
 use App\Http\Resources\TorrentResource;
 use App\Models\SearchBox;
+use App\Models\Carousel;
 use App\Repositories\SearchBoxRepository;
 use App\Repositories\UploadRepository;
 use Illuminate\Http\Request;
@@ -26,7 +27,14 @@ class UploadController extends Controller
     {
         $sections = $this->searchBoxRepository->listSections(SearchBox::listAuthorizedSectionId());
         $resource = SearchBoxResource::collection($sections);
-        return $this->success($resource);
+        
+        // 获取轮播图数据
+        $carousels = Carousel::getActiveCarouselsBySection(null, 5);
+        
+        return $this->success([
+            'sections' => $resource,
+            'carousels' => $carousels
+        ]);
     }
 
 }

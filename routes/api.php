@@ -48,6 +48,20 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 //        Route::resource('topics', \App\Http\Controllers\TopicController::class);
 
         Route::get('sections', [\App\Http\Controllers\UploadController::class, 'sections'])->middleware(ability(RoutePermissionEnum::TORRENT_UPLOAD));
+
+        // 轮播图相关路由
+        Route::group(['prefix' => 'carousels'], function () {
+            // 无需权限的路由
+            Route::get('active', [\App\Http\Controllers\CarouselController::class, 'active']);
+            
+            // 需要管理员权限的路由
+            Route::get('', [\App\Http\Controllers\CarouselController::class, 'index'])->middleware('admin');
+            Route::get('{id}', [\App\Http\Controllers\CarouselController::class, 'show'])->middleware('admin');
+            Route::post('', [\App\Http\Controllers\CarouselController::class, 'store'])->middleware('admin');
+            Route::put('{id}', [\App\Http\Controllers\CarouselController::class, 'update'])->middleware('admin');
+            Route::delete('{id}', [\App\Http\Controllers\CarouselController::class, 'destroy'])->middleware('admin');
+            Route::post('{id}/toggle', [\App\Http\Controllers\CarouselController::class, 'toggleStatus'])->middleware('admin');
+        });
         Route::get('torrents/{section?}', [\App\Http\Controllers\TorrentController::class, 'index'])->middleware(ability(RoutePermissionEnum::TORRENT_LIST));
         Route::post('upload', [\App\Http\Controllers\TorrentController::class, 'store'])->middleware(ability(RoutePermissionEnum::TORRENT_UPLOAD));
         Route::get('detail/{id}', [\App\Http\Controllers\TorrentController::class, 'show'])->middleware(ability(RoutePermissionEnum::TORRENT_VIEW));
