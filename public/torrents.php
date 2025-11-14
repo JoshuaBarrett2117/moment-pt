@@ -1113,19 +1113,16 @@ if (isset($searchstr))
 elseif ($sectiontype == $browsecatmode)
 	stdhead($lang_torrents['head_torrents']);
 else stdhead($lang_torrents['head_special']);
-print("<table width=\"97%\" class=\"main\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\"><tr><td class=\"embedded\">");
 
-displayHotAndClassic();
+// 直接显示种子列表
+if (isset($rows) && $sectiontype == $browsecatmode)
+	torrenttable($rows, "torrents", $sectiontype);
+elseif ($sectiontype == $specialcatmode)
+	torrenttable($rows, "music", $sectiontype);
+else torrenttable($rows, "bookmarks", $sectiontype);
 
-// 引入并显示轮播图组件
-require_once('carousel_display.php');
-echo display_carousel();
-	if (isset($rows) && $sectiontype == $browsecatmode)
-		torrenttable($rows, "torrents", $sectiontype);
-	elseif ($sectiontype == $specialcatmode)
-		torrenttable($rows, "music", $sectiontype);
-	else torrenttable($rows, "bookmarks", $sectiontype);
-	print($pagerbottom);
+print($pagerbottom);
+
 if (isset($count) && $count > 0) {
 	if (isset($searchstr)) {
 		print("<br />");
@@ -1135,12 +1132,13 @@ if (isset($count) && $count > 0) {
 		stdmsg($lang_torrents['std_nothing_found'],$lang_torrents['std_no_active_torrents']);
 	}
 }
+
 if ($CURUSER){
 	if ($sectiontype == $browsecatmode)
 		$USERUPDATESET[] = "last_browse = ".TIMENOW;
 	else	$USERUPDATESET[] = "last_music = ".TIMENOW;
 }
-print("</td></tr></table>");
+
 stdfoot();
 
 
