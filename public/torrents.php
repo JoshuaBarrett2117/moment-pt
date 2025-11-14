@@ -1113,7 +1113,6 @@ if (isset($searchstr))
 elseif ($sectiontype == $browsecatmode)
 	stdhead($lang_torrents['head_torrents']);
 else stdhead($lang_torrents['head_special']);
-print("<table width=\"97%\" class=\"main\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\"><tr><td class=\"embedded\">");
 
 displayHotAndClassic();
 
@@ -1140,7 +1139,6 @@ if ($CURUSER){
 		$USERUPDATESET[] = "last_browse = ".TIMENOW;
 	else	$USERUPDATESET[] = "last_music = ".TIMENOW;
 }
-print("</td></tr></table>");
 stdfoot();
 
 
