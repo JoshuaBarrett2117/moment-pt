@@ -22,17 +22,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $background = $_POST['background'] ?? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
         $sort_order = (int)($_POST['sort_order'] ?? 0);
         $active = isset($_POST['active']) ? 1 : 0;
-        
+
         $title = htmlspecialchars(trim($title));
         $description = htmlspecialchars(trim($description));
         $link = htmlspecialchars(trim($link));
         $image = htmlspecialchars(trim($image));
         $background = htmlspecialchars(trim($background));
-        
-        if (empty($title) || empty($link) || empty($image)) {
+
+        if (empty($link) || empty($image)) {
             stdmsg("错误", "标题、链接和图片是必填项！");
         } else {
-            sql_query("INSERT INTO carousels (title, description, link, image, background, sort_order, active, created_at, updated_at) VALUES 
+            sql_query("INSERT INTO carousels (title, description, link, image, background, sort_order, active, created_at, updated_at) VALUES
                       ('$title', '$description', '$link', '$image', '$background', $sort_order, $active, NOW(), NOW())");
             stdmsg("成功", "轮播图已添加！");
         }
@@ -46,18 +46,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $background = $_POST['background'] ?? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
         $sort_order = (int)($_POST['sort_order'] ?? 0);
         $active = isset($_POST['active']) ? 1 : 0;
-        
+
         $title = htmlspecialchars(trim($title));
         $description = htmlspecialchars(trim($description));
         $link = htmlspecialchars(trim($link));
         $image = htmlspecialchars(trim($image));
         $background = htmlspecialchars(trim($background));
-        
+
         if (empty($id) || empty($title) || empty($link) || empty($image)) {
             stdmsg("错误", "所有字段都是必填项！");
         } else {
-            sql_query("UPDATE carousels SET title = '$title', description = '$description', link = '$link', 
-                      image = '$image', background = '$background', sort_order = $sort_order, active = $active, 
+            sql_query("UPDATE carousels SET title = '$title', description = '$description', link = '$link',
+                      image = '$image', background = '$background', sort_order = $sort_order, active = $active,
                       updated_at = NOW() WHERE id = $id");
             stdmsg("成功", "轮播图已更新！");
         }
@@ -178,22 +178,22 @@ foreach ($carousels as $carousel) {
     print("<td class=rowfollow>" . ($carousel['active'] ? "<font color=green>启用</font>" : "<font color=red>禁用</font>") . "</td>");
     print("<td class=rowfollow>" . $carousel['sort_order'] . "</td>");
     print("<td class=rowfollow>");
-    
+
     // 编辑按钮
     print("<a href=carousel_config.php?edit=" . $carousel['id'] . " class=btn>编辑</a> ");
-    
+
     // 状态切换按钮
     print("<form method=post action=carousel_config.php style=display:inline>");
     print("<input type=hidden name=id value=\"" . $carousel['id'] . "\">");
     print("<input type=submit name=toggle_status value=\"" . ($carousel['active'] ? "禁用" : "启用") . "\" class=btn>");
     print("</form> ");
-    
+
     // 删除按钮
     print("<form method=post action=carousel_config.php style=display:inline onsubmit=\"return confirm('确定要删除这个轮播图吗？');\">");
     print("<input type=hidden name=id value=\"" . $carousel['id'] . "\">");
     print("<input type=submit name=delete value=删除 class=btn>");
     print("</form>");
-    
+
     print("</td>");
     print("</tr>");
 }
