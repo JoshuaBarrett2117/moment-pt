@@ -4,28 +4,28 @@ require_once("../include/bittorrent.php");
 
 function display_carousel() {
     global $BASEURL, $CURUSER;
-    
+
     // 从数据库获取启用的轮播图
     $query = "SELECT * FROM carousels WHERE active = '1' ORDER BY sort_order ASC";
     $result = sql_query($query);
     $carousels = [];
-    
+
     // 添加所有启用的轮播项（不再强制要求image字段）
     while ($row = mysql_fetch_assoc($result)) {
         $carousels[] = $row;
     }
-    
+
     // 如果没有有效的轮播图，则不显示
     if (empty($carousels)) {
         return '';
     }
-    
+
     // 生成轮播图HTML（使用双引号，使\n被正确解析为换行符）
     $carousel_html = "<div class=\"carousel-container\" style=\"width: 100%; margin: 20px 0; overflow: hidden; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);\">
 ";
-    $carousel_html .= "  <div id=\"carousel\" style=\"position: relative; height: 300px; background-color: #f5f5f5;\">
+    $carousel_html .= "  <div id=\"carousel\" style=\"position: relative; height: 266px; background-color: #f5f5f5;\">
 ";
-    
+
     foreach ($carousels as $index => $carousel) {
         $active = $index == 0 ? 'style=\"display: block;' : 'style=\"display: none;';
         if (!empty($carousel['background'])) {
@@ -34,13 +34,13 @@ function display_carousel() {
         $active .= '\"';
         $carousel_html .= "    <div class=\"carousel-item\" $active>
 ";
-        
+
         // 如果有链接，用a标签包裹
         if (!empty($carousel['link'])) {
             $carousel_html .= "      <a href=\"" . htmlspecialchars($carousel['link']) . "\" target=\"_blank\" style=\"display: block; height: 100%;\">
 ";
         }
-        
+
         // 显示图片或背景 - 如果有image字段则显示图片，否则显示背景颜色/渐变
         if (!empty($carousel['image'])) {
             $img_url = htmlspecialchars($carousel['image']);
@@ -58,13 +58,13 @@ function display_carousel() {
             $carousel_html .= "        </div>\n";
         }
 
-        
+
         // 如果有链接，关闭a标签
         if (!empty($carousel['link'])) {
             $carousel_html .= "      </a>
 ";
         }
-        
+
         // 如果有标题和描述，并且没有图片时显示在图片下方（有图片时在图片上显示）
         if ((!empty($carousel['title']) || !empty($carousel['description'])) && !empty($carousel['image'])) {
             $carousel_html .= "      <div class=\"carousel-caption\" style=\"position: absolute; bottom: 0; left: 0; right: 0; background-color: rgba(0,0,0,0.7); color: white; padding: 15px; text-align: center;\">\n";
@@ -76,17 +76,17 @@ function display_carousel() {
             }
             $carousel_html .= "      </div>\n";
         }
-        
+
         $carousel_html .= "    </div>
 ";
     }
-    
+
     // 添加轮播控制按钮
     $carousel_html .= "    <button id=\"carousel-prev\" style=\"position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background-color: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 18px; z-index: 10; transition: background-color 0.3s;\">&lt;</button>
 ";
     $carousel_html .= "    <button id=\"carousel-next\" style=\"position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background-color: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 18px; z-index: 10; transition: background-color 0.3s;\">&gt;</button>
 ";
-    
+
     // 添加轮播指示器
     if (count($carousels) > 1) {
         $carousel_html .= "    <div class=\"carousel-indicators\" style=\"position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px;\">
@@ -99,12 +99,12 @@ function display_carousel() {
         $carousel_html .= "    </div>
 ";
     }
-    
+
     $carousel_html .= "  </div>
 ";
     $carousel_html .= "</div>
 ";
-    
+
     // 添加轮播图JavaScript
     $carousel_html .= "<script type=\"text/javascript\">
 ";
@@ -124,7 +124,7 @@ function display_carousel() {
 ";
     $carousel_html .= "    let interval;
 ";
-    
+
     // 添加空值检查
     $carousel_html .= "    if (!items.length) {
 ";
@@ -134,7 +134,7 @@ function display_carousel() {
 ";
     $carousel_html .= "    }
 ";
-    
+
     $carousel_html .= "    function showSlide(index) {
 ";
     $carousel_html .= "      // 确保索引在有效范围内
@@ -143,13 +143,13 @@ function display_carousel() {
 ";
     $carousel_html .= "      if (index >= items.length) index = 0;
 ";
-    $carousel_html .= "      
+    $carousel_html .= "
 ";
     $carousel_html .= "      // 隐藏所有轮播项
 ";
     $carousel_html .= "      items.forEach(item => item.style.display = 'none');
 ";
-    $carousel_html .= "      
+    $carousel_html .= "
 ";
     $carousel_html .= "      // 重置所有指示器
 ";
@@ -163,13 +163,13 @@ function display_carousel() {
 ";
     $carousel_html .= "      }
 ";
-    $carousel_html .= "      
+    $carousel_html .= "
 ";
     $carousel_html .= "      // 显示当前轮播项
 ";
     $carousel_html .= "      if (items[index]) items[index].style.display = 'block';
 ";
-    $carousel_html .= "      
+    $carousel_html .= "
 ";
     $carousel_html .= "      // 设置当前指示器为激活状态
 ";
@@ -179,13 +179,13 @@ function display_carousel() {
 ";
     $carousel_html .= "      }
 ";
-    $carousel_html .= "      
+    $carousel_html .= "
 ";
     $carousel_html .= "      currentIndex = index;
 ";
     $carousel_html .= "    }
 ";
-    
+
     $carousel_html .= "    function nextSlide() {
 ";
     $carousel_html .= "      let nextIndex = currentIndex + 1;
@@ -200,7 +200,7 @@ function display_carousel() {
 ";
     $carousel_html .= "    }
 ";
-    
+
     $carousel_html .= "    function prevSlide() {
 ";
     $carousel_html .= "      let prevIndex = currentIndex - 1;
@@ -215,7 +215,7 @@ function display_carousel() {
 ";
     $carousel_html .= "    }
 ";
-    
+
     $carousel_html .= "    // 开始自动轮播
 ";
     $carousel_html .= "    function startCarousel() {
@@ -228,7 +228,7 @@ function display_carousel() {
 ";
     $carousel_html .= "    }
 ";
-    
+
     $carousel_html .= "    // 停止自动轮播
 ";
     $carousel_html .= "    function stopCarousel() {
@@ -237,7 +237,7 @@ function display_carousel() {
 ";
     $carousel_html .= "    }
 ";
-    
+
     // 添加事件监听器前进行空值检查
     $carousel_html .= "    // 添加事件监听器
 ";
@@ -255,7 +255,7 @@ function display_carousel() {
 ";
     $carousel_html .= "    }
 ";
-    
+
     $carousel_html .= "    if (nextBtn) {
 ";
     $carousel_html .= "      nextBtn.addEventListener('click', function() {
@@ -270,7 +270,7 @@ function display_carousel() {
 ";
     $carousel_html .= "    }
 ";
-    
+
     $carousel_html .= "    // 为指示器添加点击事件
 ";
     $carousel_html .= "    if (indicators && indicators.length) {
@@ -295,7 +295,7 @@ function display_carousel() {
 ";
     $carousel_html .= "    }
 ";
-    
+
     $carousel_html .= "    // 鼠标悬停时停止轮播，离开时继续
 ";
     $carousel_html .= "    if (carousel) {
@@ -306,7 +306,7 @@ function display_carousel() {
 ";
     $carousel_html .= "    }
 ";
-    
+
     $carousel_html .= "    // 开始轮播
 ";
     $carousel_html .= "    showSlide(0); // 确保第一个轮播项正确显示
@@ -317,7 +317,7 @@ function display_carousel() {
 ";
     $carousel_html .= "</script>
 ";
-    
+
     return $carousel_html;
 }
 
