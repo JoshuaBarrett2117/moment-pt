@@ -21,7 +21,7 @@ function display_carousel() {
     }
 
     // 生成轮播图HTML（使用双引号，使\n被正确解析为换行符）
-    $carousel_html = "<div class=\"carousel-container\" style=\"width: 100%; margin: 20px 0; overflow: hidden; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);\">
+    $carousel_html = "<div class=\"carousel-container\" style=\"width: 100%; margin: 0px 0; overflow: hidden; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);\">
 ";
     $carousel_html .= "  <div id=\"carousel\" style=\"position: relative; height: 266px; background-color: #f5f5f5;\">
 ";
