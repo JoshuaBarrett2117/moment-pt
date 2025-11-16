@@ -49,8 +49,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         $title = htmlspecialchars(trim($title));
         $description = htmlspecialchars(trim($description));
-        $link = htmlspecialchars(trim($link));
-        $image = htmlspecialchars(trim($image));
+        $link = trim($link);
+        $image = trim($image);
         $background = htmlspecialchars(trim($background));
 
         if (empty($link) || empty($image)) {
