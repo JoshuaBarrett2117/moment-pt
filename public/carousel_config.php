@@ -53,8 +53,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $image = htmlspecialchars(trim($image));
         $background = htmlspecialchars(trim($background));
 
-        if (empty($id) || empty($title) || empty($link) || empty($image)) {
-            stdmsg("错误", "所有字段都是必填项！");
+        if (empty($link) || empty($image)) {
+            stdmsg("错误", "url和图片地址是必填项！");
         } else {
             sql_query("UPDATE carousels SET title = '$title', description = '$description', link = '$link',
                       image = '$image', background = '$background', sort_order = $sort_order, active = $active,
