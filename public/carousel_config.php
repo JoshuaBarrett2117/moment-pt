@@ -25,12 +25,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         $title = htmlspecialchars(trim($title));
         $description = htmlspecialchars(trim($description));
-        $link = htmlspecialchars(trim($link));
-        $image = htmlspecialchars(trim($image));
+        $link = trim($link);
+        $image = trim($image);
         $background = htmlspecialchars(trim($background));
 
-        stdmsg($link);
-        stdmsg($image);
         if (empty($link) || empty($image)) {
             stdmsg("错误", "标题、链接和图片是必填项！");
         } else {
