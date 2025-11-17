@@ -5,7 +5,7 @@ body
 	color: #f5f5f5;
 	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 	background-color: #1a1a1a;
-	background-image: url('https://img.momentpt.top/i/2025/10/29/6900e91661640.jpg');
+	background-image: url('https://img.momentpt.top/i/2025/11/17/691a0359b19d6.jpg');
 	background-size: cover;
 	background-position: center center;
 	background-attachment: fixed;
@@ -960,7 +960,7 @@ td.rowfollow table {
 	scrollbar-color: #606060 rgba(26, 26, 26, 0.3);
 }
 
-img[src*="bonusformulaa.svg"], 
+img[src*="bonusformulaa.svg"],
 img[src^="pic/bonusformulaa.svg"] {
 	filter: invert(1) brightness(0.9);
 	background: rgba(255, 255, 255, 0.04);
