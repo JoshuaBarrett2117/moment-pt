@@ -1109,11 +1109,11 @@ if ($count)
     unset($res);
 }
 
-//if (isset($searchstr))
-//	stdhead($lang_torrents['head_search_results_for'].$searchstr_ori);
-//elseif ($sectiontype == $browsecatmode)
-//	stdhead($lang_torrents['head_torrents']);
-//else stdhead($lang_torrents['head_special']);
+if (isset($searchstr))
+	stdhead($lang_torrents['head_search_results_for'].$searchstr_ori);
+elseif ($sectiontype == $browsecatmode)
+	stdhead($lang_torrents['head_torrents']);
+else stdhead($lang_torrents['head_special']);
 
 // 直接显示种子列表
 if (isset($rows) && $sectiontype == $browsecatmode)
