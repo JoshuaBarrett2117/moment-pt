@@ -718,7 +718,12 @@ function get_tracker_schema_and_host($trackerUrlId, $combine = false): array|str
     $url = \App\Models\TrackerUrl::getById($trackerUrlId);
     if (empty($url)) {
         $ssl_torrent = isHttps() ? 'https://' : 'http://';
-        $base_announce_url = sprintf("%s/%s", \App\Models\Setting::getBaseUrl(), DEFAULT_TRACKER_URI);
+        // 使用更安全的方式拼接URL，避免双斜杠问题
+        $baseUrl = \App\Models\Setting::getBaseUrl();
+        $trackerUri = DEFAULT_TRACKER_URI;
+        // 移除trackerUri开头的斜杠（如果存在）
+        $trackerUri = ltrim($trackerUri, '/');
+        $base_announce_url = "$baseUrl/$trackerUri";
         $log .= ", ById no value";
     } else {
         $ssl_torrent = parse_url($url, PHP_URL_SCHEME) . "://" ;
